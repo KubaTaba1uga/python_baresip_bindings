@@ -2,7 +2,6 @@
 
 ## Installation
 
-
 ### Re
 Install re dependencies
 ```
@@ -48,3 +47,4 @@ cmake --build build -j
 ```
 
 TO-DO: is re working? shouldn't we include some path for cmake?
+
