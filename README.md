@@ -40,7 +40,7 @@ cd baresip
 ```
 Setup baresip's build
 ```
-cmake -B build
+cmake -B build -DSTATIC=ON
 ```
 Build baresip
 ```
