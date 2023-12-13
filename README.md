@@ -2,15 +2,18 @@
 
 ## Installation
 
-Clone repositories
-```
-git clone https://github.com/baresip/baresip.git
-git clone https://github.com/baresip/re
-```
+
+### Re
 Install re dependencies
 ```
 apt-get install cmake openssl zlib1g zlib1g-dev libssl-dev
 ```
+
+Clone repository
+```
+git clone https://github.com/baresip/re
+```
+
 Go into re
 ```
 cd re
@@ -25,3 +28,10 @@ Build re
 ```
 cmake --build build -j
 ```
+
+### Baresip
+Clone repository
+```
+git clone https://github.com/baresip/baresip.git
+```
+
