@@ -2,7 +2,8 @@
 
 ## Installation
 
-Clone repository
+Clone repositories
 ```
 git clone https://github.com/baresip/baresip.git
+git clone https://github.com/baresip/re
 ```
