@@ -9,7 +9,7 @@ git clone https://github.com/baresip/re
 ```
 Install dependencies
 ```
-apt-get install cmake openssl zlib1g zlib1g-dev
+apt-get install cmake openssl zlib1g zlib1g-dev libssl-dev
 ```
 Go into re
 ```
