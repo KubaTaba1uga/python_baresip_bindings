@@ -16,8 +16,12 @@ Go into re
 cd re
 ```
 
-Build re
+Setup re's build
 ```
 cmake -B build
 ```
 
+Build re
+```
+cmake --build build -j
+```
