@@ -46,3 +46,5 @@ Build baresip
 ```
 cmake --build build -j
 ```
+
+TO-DO: is re working? shouldn't we include some path for cmake?
