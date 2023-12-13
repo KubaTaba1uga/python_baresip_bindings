@@ -34,4 +34,7 @@ Clone repository
 ```
 git clone https://github.com/baresip/baresip.git
 ```
-
+Install baresip dependencies
+```
+apt-get install cmake g++
+```
