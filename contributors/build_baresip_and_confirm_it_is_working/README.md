@@ -11,7 +11,7 @@ apt-get install cmake openssl zlib1g zlib1g-dev libssl-dev
 ```
 Clone repository
 ```
-git clone -b 'v3.7.0' --single-branch --depth 1 https://github.com/baresip/re@7d57fa2
+git clone -b 'v3.7.0' --single-branch --depth 1 https://github.com/baresip/re
 ```
 Go into re
 ```
@@ -29,7 +29,7 @@ cmake --build build -j
 ### Baresip
 Clone repository
 ```
-git clone -b 'v3.7.0' --single-branch --depth 1 https://github.com/baresip/baresip.git@2e6b48d
+git clone -b 'v3.7.0' --single-branch --depth 1 https://github.com/baresip/baresip.git
 ```
 Install baresip dependencies
 ```
