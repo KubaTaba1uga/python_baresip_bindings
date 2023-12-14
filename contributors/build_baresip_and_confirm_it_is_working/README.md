@@ -1,5 +1,7 @@
 # Send message via CLI
 
+This example was created on Debian based system.
+
 ## Installation
 
 ### Re
