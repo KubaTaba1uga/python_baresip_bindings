@@ -38,6 +38,7 @@ root@baresip:~/baresip/build# ldd ./a.out
 You need to fill missing paths before running the exe.
 
 If client started successfully, You can confirm that essentials  modules loaded by pressing `h`, sth like below should appear:
+
 ![image](https://github.com/KubaTaba1uga/python_baresip_bindings/assets/73971628/21b87a5a-e2b6-44d6-b4d6-c9c2dd8fe448)
 
 At this point We know how to compile custom `baresip` code, nice :)
