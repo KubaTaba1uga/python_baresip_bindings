@@ -68,6 +68,15 @@ With real values, ex:
 sip_listen              10.0.0.1:8080
 ```
 
+In user_0/accounts substitute
+```
+<sip:user_0@<ip>:<user_0_port>>;regint=0
+```
+With real values, ex:
+```
+<sip:user_0@10.0.0.1:8080>
+```
+
 In user_0/contacts substitute
 ```
 "User 1" <sip:user_1@<ip>:<user_1_port>>
@@ -78,11 +87,34 @@ With real values, ex:
 ```
 
 
-In user_0/accounts substitute
+
+### User 1
+In user_1/config substitute 
 ```
-<sip:user_0@<ip>:<user_0_port>>;regint=0
+sip_listen              <ip>:<user_1_port>
 ```
 With real values, ex:
 ```
-<sip:user_0@10.0.0.1:8080>
+sip_listen              10.0.0.1:8181
 ```
+
+In user_1/accounts substitute
+```
+<sip:user_1@<ip>:<user_1_port>>;regint=0
+```
+With real values, ex:
+```
+<sip:user_1@10.0.0.1:8181>
+```
+
+In user_1/contacts substitute
+```
+"User 0" <sip:user_0@<ip>:<user_0_port>>
+```
+With real values, ex:
+```
+"User 0" <sip:user_0@10.0.0.1:8080>
+```
+
+
+
