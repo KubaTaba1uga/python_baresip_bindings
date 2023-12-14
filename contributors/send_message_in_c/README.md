@@ -11,8 +11,8 @@ To run exec file successfully You need to amke sure that shared libraries files 
 
 Adding libraries paths.
 ```
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./re/build
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./baresip/build
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/build
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/build
 ```
 
 If command succeeded and the client is working You can proceed.
