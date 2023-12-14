@@ -1,6 +1,6 @@
 # Send message via CLI
 
-This example was created on Debian based system, using baresip/re v3.7.0.
+This example was created on Debian based system.
 
 ## Installation
 
@@ -33,7 +33,7 @@ git clone -b 'v3.7.0' --single-branch --depth 1 https://github.com/baresip/bares
 ```
 Install baresip dependencies
 ```
-apt-get install cmake g++
+apt-get install cmake g++ pkg-config
 ```
 Go into baresip
 ```
