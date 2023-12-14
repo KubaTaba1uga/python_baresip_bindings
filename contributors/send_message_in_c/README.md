@@ -9,7 +9,7 @@ Compilation command
 gcc custom.c -I/root/re/include -I/root/baresip/include -lbaresip -lre -L/root/re/build -L/root/baresip/build  -Wl,-rpath=/root/re/build
 ```
 
-There may be an issue with shared libraries not being in LD_LIBRARY_PATH. Example:
+There may be an issue with shared libraries not being in LD_LIBRARY_PATH. Example shows how to fix missing path for `libbaresip.so.11`:
 ```
 ./a.out: error while loading shared libraries: libbaresip.so.11: cannot open shared object file: No such file or directory
 root@baresip:~/baresip/build# ldd ./a.out 
