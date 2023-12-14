@@ -28,7 +28,7 @@ I'm using `taba1uga` as debian's username, both `libre` and `baresip` are alread
 
 Compilation command
 ```
-gcc custom.c -I/home/taba1uga/re/include -I/home/taba1uga/baresip/include -lbaresip -lre -L/home/taba1uga/re/build -L/home/taba1uga/baresip/build  -Wl,-rpath=/home/taba1uga/re/build -o custom.out
+gcc custom.c -Wl,--copy-dt-needed-entries -I/home/taba1uga/re/include -I/home/taba1uga/baresip/include -lbaresip -lre -L/home/taba1uga/re/build -L/home/taba1uga/baresip/build  -Wl,-rpath=/home/taba1uga/re/build -o custom.out
 ```
 
 There may be an issue with shared libraries not being in `LD_LIBRARY_PATH`. Example shows how to fix missing path for `libbaresip.so.11`:
