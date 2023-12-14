@@ -1,6 +1,6 @@
 # Send message via CLI
 
-This example was created on Debian based system.
+This example was created on Debian based system, using baresip/re v3.7.0.
 
 ## Installation
 
