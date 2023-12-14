@@ -7,15 +7,33 @@ Compilation command
 gcc custom.c -I/root/re/include -I/root/baresip/include -lbaresip -lre -L/root/re/build -L/root/baresip/build  -Wl,-rpath=/root/re/build
 ```
 
-To run exec file successfully You need to amke sure that shared libraries files exsist in `LD_LIBRARY_PATH` environment variable.
-
-Adding libraries paths.
+There may be an issue with shared libraries not being in LD_LIBRARY_PATH. Example:
 ```
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/build
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/build
+./a.out: error while loading shared libraries: libbaresip.so.11: cannot open shared object file: No such file or directory
+root@baresip:~/baresip/build# ldd ./a.out 
+        linux-vdso.so.1 (0x00007fff745c6000)
+        libbaresip.so.11 => not found
+        libre.so.19 => /root/re/build/libre.so.19 (0x00007fe1fbdd6000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fe1fbbf5000)
+        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007fe1fbbd6000)
+        libssl.so.3 => /lib/x86_64-linux-gnu/libssl.so.3 (0x00007fe1fbb2c000)
+        libcrypto.so.3 => /lib/x86_64-linux-gnu/libcrypto.so.3 (0x00007fe1fb600000)
+        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fe1fb521000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007fe1fbe9e000)
+root@baresip:~/baresip/build# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/baresip/build
+root@baresip:~/baresip/build# ldd ./a.out 
+        linux-vdso.so.1 (0x00007ffd6cdae000)
+        libbaresip.so.11 (0x00007f4938813000)
+        libre.so.19 => /root/re/build/libre.so.19 (0x00007f4938757000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f4938571000)
+        libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f4938552000)
+        libssl.so.3 => /lib/x86_64-linux-gnu/libssl.so.3 (0x00007f49384a8000)
+        libcrypto.so.3 => /lib/x86_64-linux-gnu/libcrypto.so.3 (0x00007f4938000000)
+        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f4937f21000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f4938869000)
 ```
 
-If command succeeded and the client is working You can proceed.
+You need to fill missing paths before running the exe.
 
-You can confirm that modules loaded by pressing `h`, sth like this should appear:
+If client started successfully, You can confirm that essentials  modules loaded by pressing `h`, sth like below should appear:
 ![image](https://github.com/KubaTaba1uga/python_baresip_bindings/assets/73971628/21b87a5a-e2b6-44d6-b4d6-c9c2dd8fe448)
