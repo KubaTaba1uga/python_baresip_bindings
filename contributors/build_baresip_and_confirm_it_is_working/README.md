@@ -74,7 +74,7 @@ In user_0/accounts substitute
 ```
 With real values, ex:
 ```
-<sip:user_0@10.0.0.1:8080>
+<sip:user_0@10.0.0.1:8080>;regint=0
 ```
 
 In user_0/contacts substitute
@@ -102,7 +102,7 @@ In user_1/accounts substitute
 ```
 With real values, ex:
 ```
-<sip:user_1@10.0.0.1:8181>
+<sip:user_1@10.0.0.1:8181>;regint=0
 ```
 
 In user_1/contacts substitute
