@@ -114,5 +114,14 @@ With real values, ex:
 "User 0" <sip:user_0@10.0.0.1:8080>
 ```
 
+## Sending message
+
+We need two terminals' windows to perform next step.
+
+On Terminal 0:
+```
+
+```
+ 
 
 
