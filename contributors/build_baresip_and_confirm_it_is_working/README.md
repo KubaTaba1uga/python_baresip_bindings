@@ -9,21 +9,31 @@ Install re dependencies
 ```
 apt-get install cmake openssl zlib1g zlib1g-dev libssl-dev
 ```
+
 Clone repository
 ```
 git clone -b 'v3.7.0' --single-branch --depth 1 https://github.com/baresip/re
 ```
+
 Go into re
 ```
 cd re
 ```
+
 Setup re's build
 ```
 cmake -B build -DCMAKE_BUILD_TYPE=Release 
 ```
+
 Build re
 ```
 cmake --build build -j
+```
+
+Install re
+```
+sudo cmake --install build
+sudo ldconfig
 ```
 
 ### Baresip
@@ -31,24 +41,32 @@ Clone repository
 ```
 git clone -b 'v3.7.0' --single-branch --depth 1 https://github.com/baresip/baresip.git
 ```
+
 Install baresip dependencies
 ```
 apt-get install cmake g++ pkg-config
 ```
+
 Go into baresip
 ```
 cd baresip
 ```
+
 Setup baresip's build
 ```
 cmake -B build -DCMAKE_BUILD_TYPE=Release 
 ```
+
 Build baresip
 ```
 cmake --build build -j
 ```
 
-TO-DO: is re working? shouldn't we include some path for cmake?
+Install baresip
+```
+sudo cmake --install build
+sudo ldconfig
+```
 
 ## Environment Configuration
 
