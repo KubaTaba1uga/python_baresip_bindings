@@ -55,3 +55,34 @@ TO-DO: is re working? shouldn't we include some path for cmake?
   - user_0_port - port of the user_0's client
   - user_1_port - port of the user_1's client
 
+There are two directories user_0 and user_1.
+We need to edit some settings in each of them before we start.
+
+### User 0
+In user_0/config substitute 
+```
+sip_listen              <ip>:<user_0_port>
+```
+With real values, ex:
+```
+sip_listen              10.0.0.1:8080
+```
+
+In user_0/contacts substitute
+```
+"User 1" <sip:user_1@<ip>:<user_1_port>>
+```
+With real values, ex:
+```
+"User 1" <sip:user_1@10.0.0.1:8181>
+```
+
+
+In user_0/accounts substitute
+```
+<sip:user_0@<ip>:<user_0_port>>;regint=0
+```
+With real values, ex:
+```
+<sip:user_0@10.0.0.1:8080>
+```
