@@ -41,7 +41,7 @@ cd baresip
 ```
 Setup baresip's build
 ```
-cmake -B build -DSTATIC=ON
+cmake -B build -DCMAKE_BUILD_TYPE=Release 
 ```
 Build baresip
 ```
