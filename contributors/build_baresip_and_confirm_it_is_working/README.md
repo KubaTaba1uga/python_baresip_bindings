@@ -86,8 +86,6 @@ With real values, ex:
 "User 1" <sip:user_1@10.0.0.1:8181>
 ```
 
-
-
 ### User 1
 In user_1/config substitute 
 ```
