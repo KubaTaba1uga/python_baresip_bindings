@@ -118,10 +118,27 @@ With real values, ex:
 
 We need two terminals' windows to perform next step.
 
+### Start clients
+
 On Terminal 0:
 ```
-
+<baresip exe path> -f user_0/
 ```
+Example:
+```
+ ~/baresip/build/baresip -f user_0/ 
+```
+
+On Terminal 1:
+```
+<baresip exe path> -f user_1/
+```
+Example:
+```
+ ~/baresip/build/baresip -f user_1/ 
+```
+
+### Send message
  
 
 
