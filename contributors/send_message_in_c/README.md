@@ -4,7 +4,7 @@ To confirm that everything is working, You need to compile [example from baresip
 
 Compilation command
 ```
-gcc custom.c -I/usr/local/include/re -I/usr/local/include/baresip -lbaresip -lre 
+gcc custom.c -I./re/include -I./baresip/include -lbaresip -lre -L./re/build -L./baresip/build
 ```
 
 If command succeeded and the client is working You can proceed.
