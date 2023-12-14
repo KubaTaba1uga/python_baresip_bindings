@@ -19,7 +19,7 @@ cd re
 ```
 Setup re's build
 ```
-cmake -B build
+cmake -B build -DCMAKE_BUILD_TYPE=Release 
 ```
 Build re
 ```
