@@ -30,12 +30,6 @@ Build re
 cmake --build build -j
 ```
 
-Install re
-```
-sudo cmake --install build
-sudo ldconfig
-```
-
 ### Baresip
 Clone repository
 ```
@@ -60,12 +54,6 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release
 Build baresip
 ```
 cmake --build build -j
-```
-
-Install baresip
-```
-sudo cmake --install build
-sudo ldconfig
 ```
 
 ## Environment Configuration
