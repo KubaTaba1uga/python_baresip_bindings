@@ -8,6 +8,8 @@ To confirm that everything is working, You need to compile [example from baresip
 
 I assume that You know how to build and download both `baresip` and `libre`. If You do not check out [this article](https://github.com/KubaTaba1uga/python_baresip_bindings/blob/research_send_baresip_message_C/contributors/build_baresip_and_confirm_it_is_working/README.md). 
 
+### Build libre
+
 I'm using `taba1uga` as debian's username, both `libre` and `baresip` are already downloaded and built in my home directory.
 
 Compilation command
