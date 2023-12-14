@@ -51,8 +51,7 @@ TO-DO: is re working? shouldn't we include some path for cmake?
 ## Environment Configuration
 
  We need to specify few variables, which will be used further:
-  - user_0_ip - ip of the machine where user_0's client will be started
-  - user_1_ip - ip of the machine where user_1's client will be started (can be the same as user_0_ip)
+  - ip - ip of the machine where user_0's client and user_1's client will be started
   - user_0_port - port of the user_0's client
   - user_1_port - port of the user_1's client
 
