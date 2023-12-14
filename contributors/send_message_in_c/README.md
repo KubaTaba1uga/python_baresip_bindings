@@ -16,3 +16,6 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/build
 ```
 
 If command succeeded and the client is working You can proceed.
+
+You can confirm that modules loaded by pressing `h`, sth like this should appear:
+![image](https://github.com/KubaTaba1uga/python_baresip_bindings/assets/73971628/21b87a5a-e2b6-44d6-b4d6-c9c2dd8fe448)
