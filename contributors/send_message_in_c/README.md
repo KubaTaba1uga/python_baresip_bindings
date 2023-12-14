@@ -17,20 +17,37 @@ cmake --build build -j
 ```
 
 ### Build baresip
+Static
 ```
 git clone -b 'v3.7.0' --single-branch --depth 1 https://github.com/baresip/baresip.git
 cd baresip
 cmake -B build -DSTATIC=ON
 cmake --build build -j
 ```
+Shared
+```
+git clone -b 'v3.7.0' --single-branch --depth 1 https://github.com/baresip/baresip.git
+cd baresip
+cmake -B build -DCMAKE_BUILD_TYPE=Release 
+cmake --build build -j
+```
 
+### Compile baresip's wiki example
 I'm using `taba1uga` as debian's username, both `libre` and `baresip` are already downloaded and built in my home directory.
 
-Compilation command
+Compilation commands:
+
+#### Static
 ```
 gcc custom.c -Wl,--copy-dt-needed-entries -I/home/taba1uga/re/include -I/home/taba1uga/baresip/include -lbaresip -lre -L/home/taba1uga/re/build -L/home/taba1uga/baresip/build  -Wl,-rpath=/home/taba1uga/re/build -o custom.out
 ```
 
+#### Shared
+```
+gcc custom.c -I/home/taba1uga/re/include -I/home/taba1uga/baresip/include -lbaresip -lre -L/home/taba1uga/re/build -L/home/taba1uga/baresip/build  -Wl,-rpath=/home/taba1uga/re/build -o custom.out
+```
+
+If 
 There may be an issue with shared libraries not being in `LD_LIBRARY_PATH`. Example shows how to fix missing path for `libbaresip.so.11`:
 ```
 taba1uga@baresip:~/my_app$ gcc custom.c -I/home/taba1uga/re/include -I/home/taba1uga/baresip/include -lbaresip -lre -L/home/taba1uga/re/build -L/home/taba1uga/baresip/build  -Wl,-rpath=/home/taba1uga/re/build -o custom.out
@@ -58,8 +75,9 @@ taba1uga@baresip:~/my_app$ ldd custom.out
         libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f1cddcf9000)
         /lib64/ld-linux-x86-64.so.2 (0x00007f1cde19b000)
 ```
-
 You need to fill all missing paths before running the exe.
+
+### Test 
 
 If client started successfully, You can confirm that everything is working by pressing `h`, example:
 
