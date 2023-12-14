@@ -1,6 +1,6 @@
 # Send message in C
 
-This example was created on Debian based system.
+This document was created on Debian based system.
 
 ## Perequesites
 
