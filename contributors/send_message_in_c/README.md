@@ -6,9 +6,11 @@ This document was created on Debian based system.
 
 To confirm that everything is working, You need to compile [example from baresip's wiki](https://github.com/baresip/baresip/wiki/Using-baresip-as-a-library). It is already copied into this dir, to save You some typing. 
 
+I will use `taba1uga` as username in all commands, whenever You see word `taba1uga` You can type Your own username.
+
 Compilation command
 ```
-gcc custom.c -I/root/re/include -I/root/baresip/include -lbaresip -lre -L/root/re/build -L/root/baresip/build  -Wl,-rpath=/root/re/build
+gcc custom.c -I/home/taba1uga/re/include -I/home/taba1uga/baresip/include -lbaresip -lre -L/home/taba1uga/re/build -L/home/taba1uga/baresip/build  -Wl,-rpath=/home/taba1uga/re/build
 ```
 
 There may be an issue with shared libraries not being in LD_LIBRARY_PATH. Example shows how to fix missing path for `libbaresip.so.11`:
