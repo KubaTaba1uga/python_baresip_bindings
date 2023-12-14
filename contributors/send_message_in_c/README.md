@@ -35,7 +35,7 @@ root@baresip:~/baresip/build# ldd ./a.out
         /lib64/ld-linux-x86-64.so.2 (0x00007f4938869000)
 ```
 
-You need to fill missing paths before running the exe.
+You need to fill all missing paths before running the exe.
 
 If client started successfully, You can confirm that essentials  modules loaded by pressing `h`, sth like below should appear:
 
