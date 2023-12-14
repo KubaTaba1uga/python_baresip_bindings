@@ -4,7 +4,7 @@ To confirm that everything is working, You need to compile [example from baresip
 
 Compilation command
 ```
-gcc custom.c -I./re/include -I./baresip/include -lbaresip -lre -L./re/build -L./baresip/build
+gcc custom.c -I/root/re/include -I/root/baresip/include -lbaresip -lre -L/root/re/build -L/root/baresip/build  -Wl,-rpath=/root/re/build
 ```
 
 To run exec file successfully You need to amke sure that shared libraries files exsist in `LD_LIBRARY_PATH` environment variable.
