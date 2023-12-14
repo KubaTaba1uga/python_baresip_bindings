@@ -15,7 +15,7 @@ Compilation command
 gcc custom.c -I/home/taba1uga/re/include -I/home/taba1uga/baresip/include -lbaresip -lre -L/home/taba1uga/re/build -L/home/taba1uga/baresip/build  -Wl,-rpath=/home/taba1uga/re/build
 ```
 
-There may be an issue with shared libraries not being in LD_LIBRARY_PATH. Example shows how to fix missing path for `libbaresip.so.11`:
+There may be an issue with shared libraries not being in `LD_LIBRARY_PATH`. Example shows how to fix missing path for `libbaresip.so.11`:
 ```
 ./a.out: error while loading shared libraries: libbaresip.so.11: cannot open shared object file: No such file or directory
 root@baresip:~/baresip/build# ldd ./a.out 
@@ -43,7 +43,7 @@ root@baresip:~/baresip/build# ldd ./a.out
 
 You need to fill all missing paths before running the exe.
 
-If client started successfully, You can confirm that essentials  modules loaded by pressing `h`, sth like below should appear:
+If client started successfully, You can confirm that everything is working by pressing `h`, example:
 
 ![image](https://github.com/KubaTaba1uga/python_baresip_bindings/assets/73971628/21b87a5a-e2b6-44d6-b4d6-c9c2dd8fe448)
 
