@@ -6,6 +6,8 @@ This document was created on Debian based system.
 
 To confirm that everything is working, You need to compile [example from baresip's wiki](https://github.com/baresip/baresip/wiki/Using-baresip-as-a-library). It is already copied into this dir, to save You some typing. 
 
+I assume that You know how to build and download both `baresip` and `libre`. If You do not check out [this article](https://github.com/KubaTaba1uga/python_baresip_bindings/blob/research_send_baresip_message_C/contributors/build_baresip_and_confirm_it_is_working/README.md). 
+
 I will use `taba1uga` as username in all commands, whenever You see word `taba1uga` You can type Your own username.
 
 Compilation command
