@@ -145,5 +145,3 @@ The message should appear on the other client.
 ![image](https://github.com/KubaTaba1uga/python_baresip_bindings/assets/73971628/f0a0d225-6e2c-4f39-817d-1ee218302f95)
 
 
-
-
