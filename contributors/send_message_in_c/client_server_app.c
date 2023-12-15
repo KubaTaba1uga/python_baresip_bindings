@@ -1,9 +1,11 @@
 /* Client role is to send messages to the server.
    Server role is to display those messages on stdout.
 */
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include <re.h>
 
@@ -13,12 +15,16 @@
 #define CLIENT_IP "10.0.0.236:8181"
 
 struct account *create_server_account();
-
+static void message_recv_handler(struct ua *ua, const struct pl *peer,
+                                 const struct pl *ctype, struct mbuf *body,
+                                 void *arg);
 /* APP's LOGIC */
 int server_app(void) {
+
   struct account *server_account;
   struct contacts *all_contacts;
   struct pl pl_addr;
+  struct message *all_messages;
   int err;
 
   server_account = create_server_account();
@@ -31,13 +37,23 @@ int server_app(void) {
     return 2;
   }
 
-  pl_set_str(&pl_addr, "User 1 <sip:user_1@10.0.0.1:8181>");
+  pl_set_str(&pl_addr, "User 1 <sip:user_1@10.0.0.236:8181>");
 
   err = contact_add(all_contacts, NULL, &pl_addr);
   if (err) {
     fprintf(stderr, "Unable to add server contact\n");
     return 3;
   }
+
+  err = message_init(&all_messages);
+  if (err) {
+    fprintf(stderr, "Unable to initialize server messages container\n");
+    return 4;
+  }
+
+  err = message_listen(all_messages, message_recv_handler, NULL);
+
+  sleep(-1);
 
   return 0;
 }
@@ -48,7 +64,7 @@ struct account *create_server_account() {
   struct account *account;
   int err;
 
-  err = account_alloc(&account, "<sip:user_0@10.0.0.1:8080>;regint=0");
+  err = account_alloc(&account, "<sip:user_0@10.0.0.236:8080>;regint=0");
 
   if (err != 0) {
     puts("Unable to allocate memory for the account.");
@@ -112,12 +128,16 @@ int main(int argc, char *argv[]) {
     warning("main: configure failed: %m\n", err);
     goto out;
   }
+  struct config *cfg;
+  cfg = conf_config();
+  // SET CUSTOM IP ADDR
+  strcpy(cfg->sip.local, "0.0.0.0:8080");
 
   /*
    * Initialise the top-level baresip struct, must be
    * done AFTER configuration is complete.
    */
-  err = baresip_init(conf_config());
+  err = baresip_init(cfg);
   if (err) {
     warning("main: baresip init failed (%m)\n", err);
     goto out;
@@ -204,4 +224,11 @@ static void ua_exit_handler(void *arg) {
 static void ua_event_handler(struct ua *ua, enum ua_event ev, struct call *call,
                              const char *prm, void *arg) {
   re_printf("ua event: %s\n", uag_event_str(ev));
+}
+
+static void message_recv_handler(struct ua *ua, const struct pl *peer,
+                                 const struct pl *ctype, struct mbuf *body,
+                                 void *arg) {
+
+  info("recv msg from %r: \"%b\"\n", peer, mbuf_buf(body), mbuf_get_left(body));
 }
