@@ -8,6 +8,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 static bool is_server(int argc, char *argv[]);
 static int configure_server(void);
@@ -68,7 +69,6 @@ int main(int argc, char *argv[]) {
     initialize_server();
   else
     initialize_client();
-
   // MY APP END
 
   uag_set_exit_handler(ua_exit_handler, NULL);
@@ -176,6 +176,7 @@ int configure_client(void) {
 int initialize_client(void) {
   struct message *all_messages;
   struct ua *user_agent;
+  pthread_t thread;
   int err;
 
   user_agent = create_client_ua();
@@ -186,14 +187,24 @@ int initialize_client(void) {
     return 4;
   }
 
-  err = message_send(user_agent, "<sip:user_0@10.0.0.236:8080>", "hello world",
-                     NULL, NULL);
+  err = pthread_create(&thread, NULL, send_messages, user_agent);
   if (err) {
-    fprintf(stderr, "Unable to send message\n");
+    fprintf(stderr, "Unable to send messages in background\n");
     return 5;
   }
 
   return 0;
+}
+
+int send_messages(struct ua *user_agent) {
+  while (1) {
+    err = message_send(user_agent, "<sip:user_0@10.0.0.236:8080>",
+                       "hello world", NULL, NULL);
+
+    puts("Message send");
+
+    sleep(1);
+  }
 }
 
 struct ua *create_client_ua() {
