@@ -15,7 +15,7 @@
 #define SERVER_IP "10.0.0.236:8080"
 #define CLIENT_IP "10.0.0.236:8181"
 
-struct account *create_server_account();
+int create_server_ua();
 static void message_recv_handler(struct ua *ua, const struct pl *peer,
                                  const struct pl *ctype, struct mbuf *body,
                                  void *arg);
@@ -38,18 +38,35 @@ int configure_server(void) {
   strcpy(cfg->sip.local, "0.0.0.0:8080");
 }
 
+int configure_client(void) {
+  struct config *cfg;
+  int err;
+
+  err = conf_configure();
+  if (err) {
+    warning("main: configure failed: %m\n", err);
+    return 1;
+  }
+
+  cfg = conf_config();
+  /* APP's CONFIG */
+  // SET CUSTOM IP ADDR
+
+  strcpy(cfg->sip.local, "0.0.0.0:8181");
+}
+
 int server_app(void) {
-  /* struct account *server_account; */
+  struct account *server_account;
   struct contacts *all_contacts;
   struct pl pl_addr;
   struct message *all_messages;
   int err;
 
-  /* server_account = create_server_account(); */
-  /* if (!server_account) { */
-  /*   fprintf(stderr, "Unable to initialize server account\n"); */
-  /*   return 1; */
-  /* } */
+  err = create_server_ua();
+  if (err) {
+    fprintf(stderr, "Unable to initialize server account\n");
+    return 1;
+  }
 
   all_contacts = baresip_contacts();
   if (!all_contacts) {
@@ -74,46 +91,54 @@ int server_app(void) {
   err = message_listen(all_messages, message_recv_handler, NULL);
   if (err) {
     fprintf(stderr, "Unable to listen on messages\n");
-    return 4;
+    return 5;
   }
 
   return 0;
 }
 int client_app(void) { struct account *client_account; }
 
-/* struct account *create_server_account() { */
-/*   /\* This account is used to receive mesages from client. *\/ */
-/*   struct account *account; */
-/*   int err; */
+int create_server_ua() {
+  /* This account is used to receive mesages from client. */
+  /* struct account *account; */
+  /* int err; */
 
-/*   err = ua_init("<sip:user_0@10.0.0.236:8080>;regint=0", 0, 1, 0); */
+  /* err = account_alloc(&account, "<sip:user_0@10.0.0.1:8080>;regint=0"); */
 
-/*   if (err != 0) { */
-/*     puts("Unable to create user agent."); */
-/*     return NULL; */
-/*   } */
+  /* if (err != 0) { */
+  /*   puts("Unable to allocate memory for the account."); */
+  /*   return NULL; */
+  /* } */
+  struct ua *user_agent;
+  int err;
+  err = ua_alloc(&user_agent, "<sip:user_0@10.0.0.236:8080>;regint=0");
 
-/*   printf("\nServer account: %s\n\n", account_aor(account)); */
+  if (err != 0) {
+    puts("Unable to create user agent.");
+    return 1;
+  }
 
-/*   return account; */
-/* } */
+  printf("\nServer account: %s\n\n", account_aor(account));
 
-/* struct contact *create_client_contact(struct contacts* contacts){ */
-/*   /\* This account is used to receive mesages from client. *\/ */
-/*   struct account* account; */
-/*   int err; */
+  return 0;
+}
 
-/*   err = account_alloc(&account, "<sip:user_0@10.0.0.1:8080>;regint=0"); */
+struct contact *create_client_contact(struct contacts *contacts) {
+  /* This account is used to receive mesages from client. */
+  struct account *account;
+  int err;
 
-/*   if (err != 0){ */
-/*     puts("Unable to allocate memory for the account."); */
-/*     return NULL; */
-/*   } */
+  err = account_alloc(&account, "<sip:user_0@10.0.0.1:8080>;regint=0");
 
-/*   printf("\nServer account: %s\n\n", account_aor(account)); */
+  if (err != 0) {
+    puts("Unable to allocate memory for the account.");
+    return NULL;
+  }
 
-/*   return account; */
-/* } */
+  printf("\nServer account: %s\n\n", account_aor(account));
+
+  return account;
+}
 
 /* Main private declarations */
 static void signal_handler(int sig);
@@ -176,11 +201,11 @@ int main(int argc, char *argv[]) {
   else
     err = client_app();
 
-  err = ua_init("<sip:user_0@10.0.0.236:8080>;regint=0", 0, 1, 0);
+  /* err = ua_init("<sip:user_0@10.0.0.236:8080>;regint=0", 0, 1, 0); */
 
-  if (err != 0) {
-    puts("Unable to create user agent.");
-  }
+  /* if (err != 0) { */
+  /*   puts("Unable to create user agent."); */
+  /* } */
 
   uag_set_exit_handler(ua_exit_handler, NULL);
 
