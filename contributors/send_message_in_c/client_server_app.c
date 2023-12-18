@@ -1,11 +1,6 @@
 /* App which show's how to send p2p messages via baresip.
   Client role is to send messages to the server.
   Server role is to display those messages on stdout.
-
-  Available environment variables:
-    CLIENT_IP - host's ip on which client app is being run, ex: 10.0.0.236:8080
-    SERVER_IP - host's ip on which server app is being run, ex: 10.0.0.236:8181
-    MESSAGE - message's content, ex: hello world
 */
 //
 /* IMPORTS */
@@ -21,21 +16,10 @@
 // Baresip Library, order is important
 #include <baresip.h>
 
-#ifndef CLIENT_IP
-#define CLIENT_IP NULL
-#endif
-
-#ifndef SERVER_IP
-#define SERVER_IP NULL
-#endif
-
-#ifndef MESSAGE
-#define MESSAGE "hello world"
-#endif
-
 //
 /* PRIVATE API DECLARATIONS */
-static bool is_server(int argc, char *argv[]);
+static void parse_args(int argc, char *argv[]);
+static bool is_server(void);
 static int configure_server(void);
 static int configure_client(void);
 static int initialize_server(void);
@@ -49,15 +33,16 @@ static void signal_handler(int sig);
 static void ua_exit_handler(void *arg);
 static void ua_event_handler(struct ua *ua, enum ua_event ev, struct call *call,
                              const char *prm, void *arg);
+static char _MESSAGE[255], _CLIENT_IP[255], _SERVER_IP[255], _MODE[255];
+static char *MESSAGE = NULL, *CLIENT_IP = NULL, *SERVER_IP = NULL, *MODE = NULL;
+
 //
 /* PUBLIC API */
 int main(int argc, char *argv[]) {
   bool _enable_server;
   int err;
 
-  if (!MESSAGE || !CLIENT_IP || !SERVER_IP) {
-    fprintf(stderr, "Required environment variables not filled\n");
-  }
+  parse_args(argc, argv);
 
   /* Initialize libre */
   err = libre_init();
@@ -72,7 +57,7 @@ int main(int argc, char *argv[]) {
   }
 
   /* Configure my app  */
-  _enable_server = is_server(argc, argv);
+  _enable_server = is_server();
   if (_enable_server)
     configure_server();
   else
@@ -229,7 +214,7 @@ int initialize_client(void) {
     return 2;
   }
 
-  err = pthread_create(&thread, NULL, send_messages, user_agent);
+  err = pthread_create(&thread, NULL, all_messages, user_agent);
   if (err) {
     perror("Unable to send messages in background\n");
     return 3;
@@ -239,14 +224,23 @@ int initialize_client(void) {
 }
 
 int send_messages(struct ua *user_agent) {
+  int err;
+
   while (1) {
     err = message_send(user_agent, "<sip:user_0@10.0.0.236:8080>", MESSAGE,
                        NULL, NULL);
+
+    if (err) {
+      perror("Unable to send message\n");
+      return 1;
+    }
 
     puts("Message send");
 
     sleep(1);
   }
+
+  return 0;
 }
 
 struct ua *create_client_ua() {
@@ -290,16 +284,34 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev, struct call *call,
   re_printf("ua event: %s\n", uag_event_str(ev));
 }
 
-bool is_server(int argc, char *argv[]) {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: \n <exe> (SERVER|CLIENT) \n");
+bool is_server(void) {
+  if (!MODE)
     return false;
-  } else if (strcmp(argv[1], "SERVER") == 0)
+
+  if (strcmp(MODE, "SERVER") == 0)
     return true;
-  else if (strcmp(argv[1], "CLIENT") == 0)
-    return false;
-  else {
-    fprintf(stderr, "Usage: \n <exe> (SERVER|CLIENT) \n");
-    return false;
+
+  return false;
+}
+
+static void parse_args(int argc, char *argv[]) {
+  if (argc < 2 || argc > 4) {
+    fprintf(
+        stderr,
+        "Usage: \n <exe> (SERVER|CLIENT) (SERVER_IP) [CLIENT_IP] [MESSAGE] \n");
+    return;
+  }
+
+  strcpy(_MODE, argv[1]);
+  MODE = _MODE;
+
+  strcpy(_SERVER_IP, argv[2]);
+  SERVER_IP = _SERVER_IP;
+
+  if (!is_server()) {
+    strcpy(_CLIENT_IP, argv[3]);
+    CLIENT_IP = _CLIENT_IP;
+    strcpy(_MESSAGE, argv[4]);
+    MESSAGE = _MESSAGE;
   }
 }
