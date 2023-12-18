@@ -9,7 +9,8 @@
     (SERVER_IP) - host's ip on which server instance is run, ex: 10.0.0.236:8080
     [CLIENT_IP] - host's ip on which server instance is run, ex: 10.0.0.236:8181
                    .Required only in CLIENT mode.
-    [MESSAGE] - message that will be send by the client to the server
+    [MESSAGE] - message that will be send by the client to the server,
+                   always optional.
 */
 //
 /* IMPORTS */
@@ -27,7 +28,7 @@
 
 //
 /* PRIVATE API DECLARATIONS */
-static void parse_args(int argc, char *argv[]);
+static int parse_args(int argc, char *argv[]);
 static bool is_server(void);
 static int configure_server(void);
 static int configure_client(void);
@@ -52,7 +53,9 @@ int main(int argc, char *argv[]) {
   bool _enable_server;
   int err;
 
-  parse_args(argc, argv);
+  err = parse_args(argc, argv);
+  if (err)
+    return 1;
 
   /* Initialize libre */
   err = libre_init();
@@ -238,7 +241,7 @@ int initialize_client(void) {
     return 2;
   }
 
-  err = pthread_create(&thread, NULL, send_messages, user_agent);
+  err = pthread_create(&thread, NULL, (void *)send_messages, user_agent);
   if (err) {
     perror("Unable to send messages in background\n");
     return 3;
@@ -328,14 +331,9 @@ bool is_server(void) {
   return false;
 }
 
-static void parse_args(int argc, char *argv[]) {
-  printf("Argc: %i\n", argc);
-  if (argc < 2 || argc > 5) {
-    fprintf(
-        stderr,
-        "Usage: \n <exe> (SERVER|CLIENT) (SERVER_IP) [CLIENT_IP] [MESSAGE] \n");
-    return;
-  }
+static int parse_args(int argc, char *argv[]) {
+  if (argc < 3)
+    goto SHOW_USAGE;
 
   strcpy(_MODE, argv[1]);
   MODE = _MODE;
@@ -343,10 +341,27 @@ static void parse_args(int argc, char *argv[]) {
   strcpy(_SERVER_IP, argv[2]);
   SERVER_IP = _SERVER_IP;
 
-  if (!is_server()) {
-    strcpy(_CLIENT_IP, argv[3]);
-    CLIENT_IP = _CLIENT_IP;
+  if (is_server())
+    return 0;
+
+  if (argc < 4)
+    goto SHOW_USAGE;
+
+  strcpy(_CLIENT_IP, argv[3]);
+  CLIENT_IP = _CLIENT_IP;
+
+  if (argc == 5) {
     strcpy(_MESSAGE, argv[4]);
     MESSAGE = _MESSAGE;
+  } else {
+    MESSAGE = "Hello world";
   }
+
+  return 0;
+
+SHOW_USAGE:
+  fprintf(stderr, "Usage: \n <exe> (SERVER|CLIENT) (SERVER_IP) "
+                  "[CLIENT_IP] [MESSAGE] \n");
+
+  return 1;
 }
