@@ -7,10 +7,10 @@
 
     (SERVER|CLIENT) - app has two modes, CLIENT and SERVER, You need to pick one
     (SERVER_IP) - host's ip on which server instance is run, ex: 10.0.0.236:8080
-  /*   [CLIENT_IP] - host's ip on which server instance is run, */
-/* ex: 10.0.0.236:8181. Required only in CLIENT mode. */
-/*   [MESSAGE] - message that will be send by the client */
-* /
+    [CLIENT_IP] - host's ip on which server instance is run, ex: 10.0.0.236:8181
+                   .Required only in CLIENT mode.
+    [MESSAGE] - message that will be send by the client to the server
+*/
 //
 /* IMPORTS */
 // C Standard Library
@@ -25,9 +25,9 @@
 // Baresip Library, order is important
 #include <baresip.h>
 
-    //
-    /* PRIVATE API DECLARATIONS */
-    static void parse_args(int argc, char *argv[]);
+//
+/* PRIVATE API DECLARATIONS */
+static void parse_args(int argc, char *argv[]);
 static bool is_server(void);
 static int configure_server(void);
 static int configure_client(void);
