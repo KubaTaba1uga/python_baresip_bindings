@@ -52,12 +52,25 @@ At this point We know how to compile custom `baresip` code, nice :)
 
 ## App to send and receive messages
 
-The app's purpose is showing SIP p2p messaging. 
+The app's purpose is to show SIP p2p messaging. I chose this feature because of it's simplicity. 
 
-The app is composed of one src file. To compile it use script, ex.:
+The app is composed of one src file. To compile it You can use a script, ex.:
 ```
 bash compile.sh /home/taba1uga/re /home/taba1uga/baresip
 ```
 
 You need to start two instances of the app. One for server which will receive messages from the client.
 The other one for a client which will send messages to the server.
+
+Starting server, ex:
+```
+./client_server 'SERVER' '10.0.0.236:8080'
+```
+
+Starting client, ex:
+```
+./client_server 'CLIENT' '10.0.0.236:8080' '10.0.0.236:8181' 'i like flowers'
+```
+
+If everything is working messages should appear on server app:
+![image](https://github.com/KubaTaba1uga/python_baresip_bindings/assets/73971628/9a279d50-ad76-475b-83e4-fd7f6c565536)
