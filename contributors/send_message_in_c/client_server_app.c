@@ -1,15 +1,40 @@
-/* Client role is to send messages to the server.
-   Server role is to display those messages on stdout.
+/* App which show's how to send p2p messages via baresip.
+  Client role is to send messages to the server.
+  Server role is to display those messages on stdout.
+
+  Available environment variables:
+    CLIENT_IP - host's ip on which client app is being run, ex: 10.0.0.236:8080
+    SERVER_IP - host's ip on which server app is being run, ex: 10.0.0.236:8181
+    MESSAGE - message's content, ex: hello world
 */
-
-#include <re.h>
-
-#include <baresip.h>
-
+//
+/* IMPORTS */
+// C Standard Library
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
+// Libre Library
+#include <re.h>
+// Baresip Library, order is important
+#include <baresip.h>
+
+#ifndef CLIENT_IP
+#define CLIENT_IP NULL
+#endif
+
+#ifndef SERVER_IP
+#define SERVER_IP NULL
+#endif
+
+#ifndef MESSAGE
+#define MESSAGE "hello world"
+#endif
+
+//
+/* PRIVATE API DECLARATIONS */
 static bool is_server(int argc, char *argv[]);
 static int configure_server(void);
 static int configure_client(void);
@@ -24,29 +49,34 @@ static void signal_handler(int sig);
 static void ua_exit_handler(void *arg);
 static void ua_event_handler(struct ua *ua, enum ua_event ev, struct call *call,
                              const char *prm, void *arg);
-
+//
+/* PUBLIC API */
 int main(int argc, char *argv[]) {
   bool _enable_server;
   int err;
 
+  if (!MESSAGE || !CLIENT_IP || !SERVER_IP) {
+    fprintf(stderr, "Required environment variables not filled\n");
+  }
+
+  /* Initialize libre */
   err = libre_init();
   if (err)
     goto out;
 
+  /* Load baresip config */
   err = conf_configure();
   if (err) {
     warning("main: configure failed: %m\n", err);
     goto out;
   }
 
+  /* Configure my app  */
   _enable_server = is_server(argc, argv);
-
-  // MY APP START
   if (_enable_server)
     configure_server();
   else
     configure_client();
-  // MY APP END
 
   /*
    * Initialise the top-level baresip struct, must be
@@ -64,12 +94,11 @@ int main(int argc, char *argv[]) {
   if (err)
     goto out;
 
-  // MY APP START
+  /* Initialize my app */
   if (_enable_server)
     initialize_server();
   else
     initialize_client();
-  // MY APP END
 
   uag_set_exit_handler(ua_exit_handler, NULL);
 
@@ -112,6 +141,8 @@ out:
   return err;
 }
 
+//
+/* PRIVATE API IMPLEMENTATION */
 int configure_server(void) {
   struct config *cfg;
   int err;
@@ -119,25 +150,31 @@ int configure_server(void) {
   cfg = conf_config();
 
   // SET CUSTOM IP ADDR
-  strcpy(cfg->sip.local, "0.0.0.0:8080");
+  strcpy(cfg->sip.local, SERVER_IP);
+
+  return 0;
 }
 
 int initialize_server(void) {
   struct message *all_messages;
   int err;
 
-  create_server_ua();
+  err = create_server_ua();
+  if (err) {
+    perror("Unable to create server's user agent\n");
+    return 1;
+  }
 
   all_messages = baresip_message();
   if (!all_messages) {
-    fprintf(stderr, "Unable to initialize server messages container\n");
-    return 4;
+    perror("Unable to initialize server messages container\n");
+    return 2;
   }
 
   err = message_listen(all_messages, message_recv_handler, NULL);
   if (err) {
-    fprintf(stderr, "Unable to listen on messages\n");
-    return 5;
+    perror("Unable to listen on server messages container\n");
+    return 3;
   }
 
   return 0;
@@ -149,7 +186,6 @@ int create_server_ua() {
   err = ua_alloc(&user_agent, "<sip:user_0@10.0.0.236:8080>;regint=0");
 
   if (err != 0) {
-    puts("Unable to create user agent.");
     return 1;
   }
 
@@ -170,7 +206,9 @@ int configure_client(void) {
   cfg = conf_config();
 
   // SET CUSTOM IP ADDR
-  strcpy(cfg->sip.local, "0.0.0.0:8181");
+  strcpy(cfg->sip.local, CLIENT_IP);
+
+  return 0;
 }
 
 int initialize_client(void) {
@@ -180,17 +218,21 @@ int initialize_client(void) {
   int err;
 
   user_agent = create_client_ua();
+  if (!user_agent) {
+    perror("Unable to create server's user agent\n");
+    return 1;
+  }
 
   all_messages = baresip_message();
   if (!all_messages) {
-    fprintf(stderr, "Unable to initialize server messages container\n");
-    return 4;
+    perror("Unable to initialize server messages container\n");
+    return 2;
   }
 
   err = pthread_create(&thread, NULL, send_messages, user_agent);
   if (err) {
-    fprintf(stderr, "Unable to send messages in background\n");
-    return 5;
+    perror("Unable to send messages in background\n");
+    return 3;
   }
 
   return 0;
@@ -198,8 +240,8 @@ int initialize_client(void) {
 
 int send_messages(struct ua *user_agent) {
   while (1) {
-    err = message_send(user_agent, "<sip:user_0@10.0.0.236:8080>",
-                       "hello world", NULL, NULL);
+    err = message_send(user_agent, "<sip:user_0@10.0.0.236:8080>", MESSAGE,
+                       NULL, NULL);
 
     puts("Message send");
 
@@ -213,7 +255,7 @@ struct ua *create_client_ua() {
   err = ua_alloc(&user_agent, "<sip:user_1@10.0.0.236:8181>;regint=0");
 
   if (err != 0) {
-    puts("Unable to create user agent.");
+    perror("Unable to create user agent.");
     return NULL;
   }
 
