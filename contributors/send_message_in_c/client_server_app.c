@@ -1,7 +1,16 @@
 /* App which show's how to send p2p messages via baresip.
   Client role is to send messages to the server.
   Server role is to display those messages on stdout.
-*/
+
+  Usage:
+    <exe> (SERVER|CLIENT) (SERVER_IP) [CLIENT_IP] [MESSAGE]
+
+    (SERVER|CLIENT) - app has two modes, CLIENT and SERVER, You need to pick one
+    (SERVER_IP) - host's ip on which server instance is run, ex: 10.0.0.236:8080
+  /*   [CLIENT_IP] - host's ip on which server instance is run, */
+/* ex: 10.0.0.236:8181. Required only in CLIENT mode. */
+/*   [MESSAGE] - message that will be send by the client */
+* /
 //
 /* IMPORTS */
 // C Standard Library
@@ -16,9 +25,9 @@
 // Baresip Library, order is important
 #include <baresip.h>
 
-//
-/* PRIVATE API DECLARATIONS */
-static void parse_args(int argc, char *argv[]);
+    //
+    /* PRIVATE API DECLARATIONS */
+    static void parse_args(int argc, char *argv[]);
 static bool is_server(void);
 static int configure_server(void);
 static int configure_client(void);
@@ -26,6 +35,7 @@ static int initialize_server(void);
 static int initialize_client(void);
 static int create_server_ua(void);
 struct ua *create_client_ua();
+static int send_messages(struct ua *user_agent);
 static void message_recv_handler(struct ua *ua, const struct pl *peer,
                                  const struct pl *ctype, struct mbuf *body,
                                  void *arg);
@@ -168,7 +178,13 @@ int initialize_server(void) {
 int create_server_ua() {
   struct ua *user_agent;
   int err;
-  err = ua_alloc(&user_agent, "<sip:user_0@10.0.0.236:8080>;regint=0");
+  char aor[255] = "<sip:user_0@";
+
+  strcat(aor, SERVER_IP);
+
+  strcat(aor, ">;regint=0");
+
+  err = ua_alloc(&user_agent, aor);
 
   if (err != 0) {
     return 1;
@@ -214,7 +230,7 @@ int initialize_client(void) {
     return 2;
   }
 
-  err = pthread_create(&thread, NULL, all_messages, user_agent);
+  err = pthread_create(&thread, NULL, send_messages, user_agent);
   if (err) {
     perror("Unable to send messages in background\n");
     return 3;
@@ -225,10 +241,14 @@ int initialize_client(void) {
 
 int send_messages(struct ua *user_agent) {
   int err;
+  char aor[255] = "<sip:user_0@";
+
+  strcat(aor, SERVER_IP);
+
+  strcat(aor, ">");
 
   while (1) {
-    err = message_send(user_agent, "<sip:user_0@10.0.0.236:8080>", MESSAGE,
-                       NULL, NULL);
+    err = message_send(user_agent, aor, MESSAGE, NULL, NULL);
 
     if (err) {
       perror("Unable to send message\n");
@@ -246,7 +266,13 @@ int send_messages(struct ua *user_agent) {
 struct ua *create_client_ua() {
   struct ua *user_agent;
   int err;
-  err = ua_alloc(&user_agent, "<sip:user_1@10.0.0.236:8181>;regint=0");
+  char aor[255] = "<sip:user_1@";
+
+  strcat(aor, CLIENT_IP);
+
+  strcat(aor, ">;regint=0");
+
+  err = ua_alloc(&user_agent, aor);
 
   if (err != 0) {
     perror("Unable to create user agent.");
@@ -295,7 +321,8 @@ bool is_server(void) {
 }
 
 static void parse_args(int argc, char *argv[]) {
-  if (argc < 2 || argc > 4) {
+  printf("Argc: %i\n", argc);
+  if (argc < 2 || argc > 5) {
     fprintf(
         stderr,
         "Usage: \n <exe> (SERVER|CLIENT) (SERVER_IP) [CLIENT_IP] [MESSAGE] \n");
