@@ -69,9 +69,13 @@ int main(int argc, char *argv[]) {
   /* Configure my app  */
   _enable_server = is_server();
   if (_enable_server)
-    configure_server();
+    err = configure_server();
   else
-    configure_client();
+    err = configure_client();
+  if (err) {
+    fprintf(stderr, "App configuration failed\n");
+    goto out;
+  }
 
   /*
    * Initialise the top-level baresip struct, must be
@@ -91,9 +95,13 @@ int main(int argc, char *argv[]) {
 
   /* Initialize my app */
   if (_enable_server)
-    initialize_server();
+    err = initialize_server();
   else
-    initialize_client();
+    err = initialize_client();
+  if (err) {
+    fprintf(stderr, "App initialization failed\n");
+    goto out;
+  }
 
   uag_set_exit_handler(ua_exit_handler, NULL);
 
