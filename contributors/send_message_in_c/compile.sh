@@ -4,7 +4,7 @@ RE_PATH=$1
 
 BARESIP_PATH=$2
 
-gcc client_server.c -g \
+gcc client_server_app.c -g \
     -Wl,--copy-dt-needed-entries \
     -I$RE_PATH/include -I$BARESIP_PATH/include \
     -lbaresip -lre -lpthread \
