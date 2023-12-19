@@ -24,3 +24,12 @@ If everything succeeded `libfoo.so` should appear in `foo_lib/build`.
 
 ## Build foo_lib bindings
 
+```
+python3 build_foo_lib.py
+```
+
+## Use foo_lib
+
+```
+python3 example.py
+```
