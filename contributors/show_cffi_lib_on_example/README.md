@@ -23,8 +23,12 @@ cd ..
 If everything succeeded `libfoo.so` should appear in `foo_lib/build`.
 
 ## Build foo_lib bindings
-
 ```
+python3 -m virtualenv .venv
+. .venv/bin/activate
+```
+```
+pip install -r requirements.txt
 python3 build_foo_lib.py
 ```
 
