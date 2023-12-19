@@ -24,13 +24,6 @@ cd baresip
 cmake -B build -DSTATIC=ON
 cmake --build build -j
 ```
-Shared
-```
-git clone -b 'v3.7.0' --single-branch --depth 1 https://github.com/baresip/baresip.git
-cd baresip
-cmake -B build -DCMAKE_BUILD_TYPE=Release 
-cmake --build build -j
-```
 
 ### Compile baresip's wiki example
 I'm using `taba1uga` as debian's username, both `libre` and `baresip` are already downloaded and built in my home directory.
